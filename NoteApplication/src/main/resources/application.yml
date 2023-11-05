@@ -1,0 +1,37 @@
+
+springdoc:
+  swagger-ui:
+    tryItOutEnabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    filter: true
+
+logging:
+  level:
+    com.example.backend: DEBUG
+
+---
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/backend
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: 8080
+
+
+
+
