@@ -2,15 +2,16 @@ package com.example.NoteApplication.service;
 
 import com.example.NoteApplication.DTO.NoteDto;
 import com.example.NoteApplication.entity.Note;
+import com.example.NoteApplication.exception.NoteNotFoundException;
 import com.example.NoteApplication.mapper.NoteMapper;
 import com.example.NoteApplication.repository.NoteRepository;
+import com.example.NoteApplication.service.interfaces.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.NoteApplication.service.constants.ServiceConstants.NOTE_NOT_FOUND;
 
@@ -25,7 +26,7 @@ public class NoteServiceImpl implements NoteService {
     public final NoteDto findById(Long id) {
         return noteRepository.findById(id)
                 .map(noteMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOTE_NOT_FOUND));
+                .orElseThrow(() -> new NoteNotFoundException(String.format(NOTE_NOT_FOUND, id)));
     }
 
     @Override
@@ -51,17 +52,19 @@ public class NoteServiceImpl implements NoteService {
     public final NoteDto deleteById(Long id) {
         NoteDto deletedNote = noteRepository.findById(id)
                 .map(noteMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOTE_NOT_FOUND));
+                .orElseThrow(() -> new NoteNotFoundException(String.format(NOTE_NOT_FOUND, id)));
         noteRepository.deleteById(id);
         return deletedNote;
     }
 
     @Override
     public final NoteDto updateNote(Long id, NoteDto noteDto) {
-        if (!Objects.equals(id, noteDto.getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id and note.id is not equal");
-        }
+        Note oldNote = noteRepository.findById(id)
+                .orElseThrow(() -> new NoteNotFoundException(String.format(NOTE_NOT_FOUND, id)));
+
         Note note = noteMapper.toEntity(noteDto);
+        note.setId(oldNote.getId());
+
         note = noteRepository.saveAndFlush(note);
         return noteMapper.toDto(note);
     }

@@ -1,4 +1,4 @@
-package com.example.NoteApplication.entity;
+package com.example.NoteApplication.entity.audit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

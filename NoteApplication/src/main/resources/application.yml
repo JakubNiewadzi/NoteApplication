@@ -14,9 +14,9 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/backend
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create-drop

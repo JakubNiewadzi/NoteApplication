@@ -1,4 +1,4 @@
-package com.example.NoteApplication.service;
+package com.example.NoteApplication.service.interfaces;
 
 import com.example.NoteApplication.DTO.NoteDto;
 

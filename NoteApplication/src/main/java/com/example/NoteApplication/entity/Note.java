@@ -1,5 +1,6 @@
 package com.example.NoteApplication.entity;
 
+import com.example.NoteApplication.entity.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

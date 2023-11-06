@@ -1,23 +1,27 @@
 package com.example.NoteApplication.DTO;
 
+import com.example.NoteApplication.DTO.constants.Views;
 import com.example.NoteApplication.entity.Subject;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 import static com.example.NoteApplication.DTO.constants.NoteDtoConstants.*;
 
-@Value
+@Getter
+@Setter
 @Jacksonized
 @SuperBuilder
 public class NoteDto {
 
     @Schema(description = "Note id")
-    @JsonView({Views.Patch.class})
+    @JsonView()
     Long id;
     @Schema(description = "Note name", example = "English - first class note")
     @JsonView({Views.Get.class, Views.Patch.class, Views.Post.class})

@@ -1,7 +1,8 @@
 package com.example.NoteApplication.controller;
 
 import com.example.NoteApplication.DTO.NoteDto;
-import com.example.NoteApplication.DTO.Views;
+import com.example.NoteApplication.DTO.constants.Views;
+import com.example.NoteApplication.controller.interfaces.NoteController;
 import com.example.NoteApplication.service.NoteServiceImpl;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@Tag(name = "Notes", description = "Notes management API")
 @RequiredArgsConstructor
 @RequestMapping("/note")
 public class NoteControllerImpl implements NoteController {
@@ -38,9 +37,6 @@ public class NoteControllerImpl implements NoteController {
     @ApiResponse(
             responseCode = "404",
             content = {@Content(schema = @Schema())})
-    @ApiResponse(
-            responseCode = "500",
-            content = {@Content(schema = @Schema())})
     @GetMapping("/{id}")
     @Override
     public final NoteDto getNote(@Parameter(description = "Note Id.", example = "1") @PathVariable Long id) {
@@ -54,7 +50,6 @@ public class NoteControllerImpl implements NoteController {
             tags = {"Get"}
     )
     @GetMapping
-    @JsonView(Views.Get.class)
     @Override
     public final List<NoteDto> getAllNotes() {
         log.debug("Getting all notes");
@@ -80,8 +75,7 @@ public class NoteControllerImpl implements NoteController {
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(value = Views.Get.class)
     @Override
-    public final NoteDto create(
-            @Valid @RequestBody @JsonView(value = Views.Post.class) NoteDto note) {
+    public final NoteDto create(@Valid @RequestBody @JsonView(value = Views.Post.class) NoteDto note) {
         log.debug("Creating note: {}", note);
         return noteService.createNote(note);
     }

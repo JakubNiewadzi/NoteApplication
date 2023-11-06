@@ -1,4 +1,4 @@
-package com.example.NoteApplication.controller;
+package com.example.NoteApplication.controller.interfaces;
 
 import com.example.NoteApplication.DTO.NoteDto;
 

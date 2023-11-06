@@ -1,4 +1,4 @@
-package com.example.NoteApplication.config;
+package com.example.NoteApplication.config.audit;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
