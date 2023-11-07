@@ -3,7 +3,7 @@ package com.example.NoteApplication.controller;
 import com.example.NoteApplication.DTO.NoteDto;
 import com.example.NoteApplication.DTO.constants.Views;
 import com.example.NoteApplication.controller.interfaces.NoteController;
-import com.example.NoteApplication.service.NoteServiceImpl;
+import com.example.NoteApplication.service.interfaces.NoteService;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/note")
 public class NoteControllerImpl implements NoteController {
 
-    private final NoteServiceImpl noteService;
+    private final NoteService noteService;
 
     @Operation(
             summary = "Find a Note by Id",
@@ -49,6 +49,13 @@ public class NoteControllerImpl implements NoteController {
             description = "Getting all notes from database",
             tags = {"Get"}
     )
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(schema = @Schema(implementation = NoteDto.class), mediaType = "application/json")})
+    @ApiResponse(
+            responseCode = "404",
+            content = {@Content(schema = @Schema())})
     @GetMapping
     @Override
     public final List<NoteDto> getAllNotes() {
@@ -65,6 +72,17 @@ public class NoteControllerImpl implements NoteController {
     @GetMapping("/findBySubject")
     public final List<NoteDto> searchNotesBySubject(@RequestParam String subject) {
         return noteService.searchNotesBySubject(subject);
+    }
+
+    @Override
+    @Operation(
+            summary = "Find all notes by name",
+            description = "Get all notes from database with matching name",
+            tags = {"Get"}
+    )
+    @GetMapping("/findByName")
+    public List<NoteDto> searchNotesByName(String name) {
+        return noteService.searchNotesByName(name);
     }
 
     @Operation(

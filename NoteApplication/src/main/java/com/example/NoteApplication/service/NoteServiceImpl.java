@@ -2,18 +2,17 @@ package com.example.NoteApplication.service;
 
 import com.example.NoteApplication.DTO.NoteDto;
 import com.example.NoteApplication.entity.Note;
+import com.example.NoteApplication.exception.NoteDtoHasIdException;
 import com.example.NoteApplication.exception.NoteNotFoundException;
 import com.example.NoteApplication.mapper.NoteMapper;
 import com.example.NoteApplication.repository.NoteRepository;
 import com.example.NoteApplication.service.interfaces.NoteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static com.example.NoteApplication.service.constants.ServiceConstants.NOTE_NOT_FOUND;
+import static com.example.NoteApplication.service.constants.ServiceConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,16 +30,22 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public final List<NoteDto> findAll() {
-        return noteRepository.findAll()
+        List<NoteDto> noteDtos =  noteRepository.findAll()
                 .stream()
                 .map(noteMapper::toDto)
                 .toList();
+
+        if(noteDtos.isEmpty()){
+            throw new NoteNotFoundException(NO_NOTES_IN_DATABASE);
+        }
+
+        return noteDtos;
     }
 
     @Override
     public final NoteDto createNote(NoteDto noteDto) {
         if (noteDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide note without id");
+            throw new NoteDtoHasIdException(DTO_ID);
         }
 
         Note note = noteMapper.toEntity(noteDto);
@@ -72,6 +77,14 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<NoteDto> searchNotesBySubject(String subject) {
         return noteRepository.findBySubject(subject)
+                .stream()
+                .map(noteMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<NoteDto> searchNotesByName(String name) {
+        return noteRepository.findByName(name)
                 .stream()
                 .map(noteMapper::toDto)
                 .toList();

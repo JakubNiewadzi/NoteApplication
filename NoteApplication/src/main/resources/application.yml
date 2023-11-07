@@ -1,8 +1,6 @@
 
 springdoc:
   swagger-ui:
-    tryItOutEnabled: true
-    operationsSorter: method
     tagsSorter: alpha
     filter: true
 
@@ -14,12 +12,12 @@ logging:
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
+    url: ${DATABASE_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DATABASE_DDL}
     show-sql: true
     properties:
       hibernate:

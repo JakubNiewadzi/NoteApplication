@@ -20,6 +20,7 @@ public class Note extends Auditable {
     private long id;
     private String name;
     private String content;
+
     @Enumerated(EnumType.STRING)
     private Subject subject;
 }

@@ -12,6 +12,8 @@ public interface NoteController {
 
     List<NoteDto> searchNotesBySubject(String subject);
 
+    List<NoteDto> searchNotesByName(String name);
+
     NoteDto create(NoteDto note);
 
     NoteDto deleteNote(Long id);

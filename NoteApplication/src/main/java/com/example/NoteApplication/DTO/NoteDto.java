@@ -4,6 +4,7 @@ import com.example.NoteApplication.DTO.constants.Views;
 import com.example.NoteApplication.entity.Subject;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -33,7 +34,7 @@ public class NoteDto {
     @NotNull(message = CONTENT_NOT_NULL_MESSAGE)
     @NotBlank(message = CONTENT_NOT_BLANK_MESSAGE)
     String content;
-    @Schema(description = "Note subject", example = "ENGLISH")
+    @Schema(description = "Note subject", example = "ENGLISH", allowableValues = "MATHS, COMPUTE_SCIENCE, ENGLISH, POLISH")
     @JsonView({Views.Get.class, Views.Patch.class, Views.Post.class})
     @NotNull(message = SUBJECT_NOT_NULL_MESSAGE)
     Subject subject;
