@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,14 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/note")
+@Tag(name = "Notes", description = "Notes management APIs")
 public class NoteControllerImpl implements NoteController {
 
     private final NoteService noteService;
 
     @Operation(
             summary = "Find a Note by Id",
-            description = "Get a Note object by specifying its id.",
-            tags = {"Get"})
+            description = "Get a Note object by specifying its id.")
     @ApiResponse(
             responseCode = "200",
             content = {
@@ -46,8 +47,7 @@ public class NoteControllerImpl implements NoteController {
 
     @Operation(
             summary = "Find all notes in database",
-            description = "Getting all notes from database",
-            tags = {"Get"}
+            description = "Getting all notes from database"
     )
     @ApiResponse(
             responseCode = "200",
@@ -66,42 +66,40 @@ public class NoteControllerImpl implements NoteController {
     @Override
     @Operation(
             summary = "Find all notes by subject",
-            description = "Get all notes from database with a certain subject",
-            tags = {"Get"}
+            description = "Get all notes from database with a certain subject"
     )
     @GetMapping("/findBySubject")
     public final List<NoteDto> searchNotesBySubject(@RequestParam String subject) {
+        log.debug("Searching a note by subject");
         return noteService.searchNotesBySubject(subject);
     }
 
     @Override
     @Operation(
             summary = "Find all notes by name",
-            description = "Get all notes from database with matching name",
-            tags = {"Get"}
+            description = "Get all notes from database with matching name"
     )
     @GetMapping("/findByName")
     public List<NoteDto> searchNotesByName(String name) {
+        log.debug("Searching a note by name");
         return noteService.searchNotesByName(name);
     }
 
     @Operation(
             summary = "Create a Note",
-            description = "Create a Note object.",
-            tags = {"Post"})
+            description = "Create a Note object.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(value = Views.Get.class)
+    @JsonView(Views.Post.class)
     @Override
-    public final NoteDto create(@Valid @RequestBody @JsonView(value = Views.Post.class) NoteDto note) {
+    public final NoteDto createNote(@Valid @RequestBody @JsonView(value = Views.Post.class) NoteDto note) {
         log.debug("Creating note: {}", note);
         return noteService.createNote(note);
     }
 
     @Operation(
             summary = "Delete note by its id",
-            description = "Delete note by its id",
-            tags = {"Delete"}
+            description = "Delete note by its id"
     )
     @DeleteMapping("/{id}")
     @Override
@@ -113,11 +111,9 @@ public class NoteControllerImpl implements NoteController {
 
     @Operation(
             summary = "Update a note by its id",
-            description = "Update a note in repository",
-            tags = {"Patch"}
+            description = "Update a note in repository"
     )
     @PatchMapping("/{id}")
-    @JsonView(Views.Patch.class)
     @Override
     public final NoteDto updateNote(
             @Parameter(description = "Note id", example = "1") @PathVariable Long id,

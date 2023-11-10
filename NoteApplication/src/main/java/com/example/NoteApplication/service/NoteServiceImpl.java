@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.NoteApplication.service.constants.ServiceConstants.*;
+import static com.example.NoteApplication.service.constants.NoteServiceConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +30,10 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public final List<NoteDto> findAll() {
-        List<NoteDto> noteDtos =  noteRepository.findAll()
+        return noteRepository.findAll()
                 .stream()
                 .map(noteMapper::toDto)
                 .toList();
-
-        if(noteDtos.isEmpty()){
-            throw new NoteNotFoundException(NO_NOTES_IN_DATABASE);
-        }
-
-        return noteDtos;
     }
 
     @Override

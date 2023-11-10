@@ -1,8 +1,8 @@
 package com.example.NoteApplication.DTO.constants;
 
-public final class NoteDtoConstants {
+public final class DtoConstants {
 
-    private NoteDtoConstants() {
+    private DtoConstants() {
     }
 
     public static final String NAME_NOT_NULL_MESSAGE = "Name field cannot be null";
