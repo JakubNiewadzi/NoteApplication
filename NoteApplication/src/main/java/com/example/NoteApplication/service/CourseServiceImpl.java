@@ -2,12 +2,15 @@ package com.example.NoteApplication.service;
 
 import com.example.NoteApplication.DTO.CourseDto;
 import com.example.NoteApplication.entity.Course;
+import com.example.NoteApplication.entity.Note;
 import com.example.NoteApplication.exception.CourseAlreadyInDatabaseException;
 import com.example.NoteApplication.exception.CourseDtoHasIdException;
 import com.example.NoteApplication.exception.CourseNotFoundException;
 import com.example.NoteApplication.mapper.CourseMapper;
 import com.example.NoteApplication.repository.CourseRepository;
+import com.example.NoteApplication.repository.NoteRepository;
 import com.example.NoteApplication.service.interfaces.CourseService;
+import com.example.NoteApplication.service.interfaces.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+    private final NoteRepository noteRepository;
 
     @Override
     public List<CourseDto> getCourses() {
@@ -56,6 +60,8 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseMapper::toDto)
                 .orElseThrow(() -> new CourseNotFoundException(
                         String.format(COURSE_NOT_FOUND, id)));
+
+        noteRepository.deleteAll(noteRepository.findByCourseId(id));
         courseRepository.deleteById(id);
         return courseDto;
     }
@@ -65,6 +71,7 @@ public class CourseServiceImpl implements CourseService {
         Course oldCourse = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException(
                         String.format(COURSE_NOT_FOUND, id)));
+
         checkCourseByName(courseDto.getName());
         Course course = courseMapper.toEntity(courseDto);
         course.setId(oldCourse.getId());

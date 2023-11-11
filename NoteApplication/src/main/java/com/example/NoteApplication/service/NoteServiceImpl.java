@@ -69,14 +69,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<NoteDto> searchNotesBySubject(String subject) {
-        return noteRepository.findBySubject(subject)
-                .stream()
-                .map(noteMapper::toDto)
-                .toList();
-    }
-
-    @Override
     public List<NoteDto> searchNotesByName(String name) {
         return noteRepository.findByName(name)
                 .stream()

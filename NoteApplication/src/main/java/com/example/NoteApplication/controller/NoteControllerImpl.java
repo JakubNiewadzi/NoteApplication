@@ -65,17 +65,6 @@ public class NoteControllerImpl implements NoteController {
 
     @Override
     @Operation(
-            summary = "Find all notes by subject",
-            description = "Get all notes from database with a certain subject"
-    )
-    @GetMapping("/findBySubject")
-    public final List<NoteDto> searchNotesBySubject(@RequestParam String subject) {
-        log.debug("Searching a note by subject");
-        return noteService.searchNotesBySubject(subject);
-    }
-
-    @Override
-    @Operation(
             summary = "Find all notes by name",
             description = "Get all notes from database with matching name"
     )

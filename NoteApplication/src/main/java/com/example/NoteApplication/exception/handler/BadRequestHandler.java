@@ -15,7 +15,7 @@ public class BadRequestHandler {
     public final ResponseEntity<String> handleBadRequestException(BadRequestException exception){
         String message = exception.getMessage();
 
-        log.error("There has been an error trying to find a note in repository");
+        log.error("Given request is invalid.");
 
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }

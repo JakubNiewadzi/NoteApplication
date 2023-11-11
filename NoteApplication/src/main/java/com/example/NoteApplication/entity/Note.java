@@ -20,7 +20,9 @@ public class Note extends Auditable {
     private long id;
     private String name;
     private String content;
-
-    @Enumerated(EnumType.STRING)
-    private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+    /*@Enumerated(EnumType.STRING)
+    private Subject subject;*/
 }

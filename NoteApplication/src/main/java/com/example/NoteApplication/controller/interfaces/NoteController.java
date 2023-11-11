@@ -10,8 +10,6 @@ public interface NoteController {
 
     List<NoteDto> getAllNotes();
 
-    List<NoteDto> searchNotesBySubject(String subject);
-
     List<NoteDto> searchNotesByName(String name);
 
     NoteDto createNote(NoteDto note);

@@ -16,7 +16,6 @@ public interface NoteService {
 
     NoteDto updateNote(Long id, NoteDto noteDto);
 
-    List<NoteDto> searchNotesBySubject(String subject);
-
     List<NoteDto> searchNotesByName(String name);
+
 }

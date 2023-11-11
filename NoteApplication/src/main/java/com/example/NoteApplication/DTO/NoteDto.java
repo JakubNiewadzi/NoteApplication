@@ -1,6 +1,7 @@
 package com.example.NoteApplication.DTO;
 
 import com.example.NoteApplication.DTO.constants.Views;
+import com.example.NoteApplication.entity.Course;
 import com.example.NoteApplication.entity.Subject;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,9 +33,9 @@ public class NoteDto {
     @NotNull(message = CONTENT_NOT_NULL_MESSAGE)
     @NotBlank(message = CONTENT_NOT_BLANK_MESSAGE)
     String content;
-    @Schema(description = "Note subject", example = "ENGLISH", allowableValues = "MATHS, COMPUTE_SCIENCE, ENGLISH, POLISH")
+    @Schema(description = "Course id", example = "1")
     @JsonView({Views.Get.class, Views.Patch.class, Views.Post.class})
     @NotNull(message = SUBJECT_NOT_NULL_MESSAGE)
-    Subject subject;
+    Long courseId;
 
 }
