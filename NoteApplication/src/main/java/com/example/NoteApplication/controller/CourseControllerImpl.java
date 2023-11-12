@@ -36,9 +36,6 @@ public class CourseControllerImpl implements CourseController {
             responseCode = "200",
             content = {
                     @Content(schema = @Schema(implementation = CourseDto.class), mediaType = "application/json")})
-    @ApiResponse(
-            responseCode = "404",
-            content = {@Content(schema = @Schema())})
     @GetMapping
     public List<CourseDto> getCourses() {
         log.debug("Getting all courses");
@@ -53,9 +50,6 @@ public class CourseControllerImpl implements CourseController {
             responseCode = "200",
             content = {
                     @Content(schema = @Schema(implementation = CourseDto.class), mediaType = "application/json")})
-    @ApiResponse(
-            responseCode = "404",
-            content = {@Content(schema = @Schema())})
     @GetMapping("/{id}")
     public CourseDto getCourseById(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id){
         log.debug("Getting a course by id: {}", id);

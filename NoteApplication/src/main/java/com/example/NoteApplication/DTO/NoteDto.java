@@ -35,7 +35,7 @@ public class NoteDto {
     String content;
     @Schema(description = "Course id", example = "1")
     @JsonView({Views.Get.class, Views.Patch.class, Views.Post.class})
-    @NotNull(message = SUBJECT_NOT_NULL_MESSAGE)
+    @NotNull(message = COURSE_ID_NOT_NULL_MESSAGE)
     Long courseId;
 
 }

@@ -23,6 +23,4 @@ public class Note extends Auditable {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-    /*@Enumerated(EnumType.STRING)
-    private Subject subject;*/
 }

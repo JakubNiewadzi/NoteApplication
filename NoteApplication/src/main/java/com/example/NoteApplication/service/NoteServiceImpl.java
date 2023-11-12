@@ -39,7 +39,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public final NoteDto createNote(NoteDto noteDto) {
         if (noteDto.getId() != null) {
-            throw new NoteDtoHasIdException(DTO_ID);
+            throw new NoteDtoHasIdException(NOTE_DTO_HAS_ID);
         }
 
         Note note = noteMapper.toEntity(noteDto);
@@ -71,6 +71,14 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<NoteDto> searchNotesByName(String name) {
         return noteRepository.findByName(name)
+                .stream()
+                .map(noteMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<NoteDto> searchNotesByCourseId(Long courseId) {
+        return noteRepository.findByCourseId(courseId)
                 .stream()
                 .map(noteMapper::toDto)
                 .toList();

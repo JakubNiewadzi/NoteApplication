@@ -18,4 +18,5 @@ public interface NoteService {
 
     List<NoteDto> searchNotesByName(String name);
 
+    List<NoteDto> searchNotesByCourseId(Long courseId);
 }

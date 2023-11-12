@@ -35,9 +35,6 @@ public class NoteControllerImpl implements NoteController {
             responseCode = "200",
             content = {
                     @Content(schema = @Schema(implementation = NoteDto.class), mediaType = "application/json")})
-    @ApiResponse(
-            responseCode = "404",
-            content = {@Content(schema = @Schema())})
     @GetMapping("/{id}")
     @Override
     public final NoteDto getNote(@Parameter(description = "Note Id.", example = "1") @PathVariable Long id) {
@@ -53,9 +50,6 @@ public class NoteControllerImpl implements NoteController {
             responseCode = "200",
             content = {
                     @Content(schema = @Schema(implementation = NoteDto.class), mediaType = "application/json")})
-    @ApiResponse(
-            responseCode = "404",
-            content = {@Content(schema = @Schema())})
     @GetMapping
     @Override
     public final List<NoteDto> getAllNotes() {
@@ -69,9 +63,18 @@ public class NoteControllerImpl implements NoteController {
             description = "Get all notes from database with matching name"
     )
     @GetMapping("/findByName")
-    public List<NoteDto> searchNotesByName(String name) {
-        log.debug("Searching a note by name");
+    public List<NoteDto> searchNotesByName(@RequestParam String name) {
+        log.debug("Searching notes by name: {}", name);
         return noteService.searchNotesByName(name);
+    }
+    @Operation(
+            summary = "Find all notes by course id",
+            description = "Get all notes from database with matching course id"
+    )
+    @GetMapping("/getByCourseId/{courseId}")
+    public List<NoteDto> searchNotesByCourseId(@PathVariable Long courseId){
+        log.debug("Searching notes by course id: {}", courseId);
+        return noteService.searchNotesByCourseId(courseId);
     }
 
     @Operation(
