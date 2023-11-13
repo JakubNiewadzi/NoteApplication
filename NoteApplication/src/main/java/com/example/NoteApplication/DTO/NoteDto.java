@@ -1,8 +1,6 @@
 package com.example.NoteApplication.DTO;
 
 import com.example.NoteApplication.DTO.constants.Views;
-import com.example.NoteApplication.entity.Course;
-import com.example.NoteApplication.entity.Subject;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
