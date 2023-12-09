@@ -1,0 +1,7 @@
+**
+!../../frontend/public
+!src
+!.env
+!package.json
+!package-lock.json
+!nginx.conf

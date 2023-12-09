@@ -1,8 +1,39 @@
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include:
+          - health
+          - info
+  endpoint:
+    health:
+      enabled: true
+      group:
+        details:
+          show-details: "always"
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      source: "@java.version@"
+      target: "@java.version@"
 
 springdoc:
+  show-actuator: true
   swagger-ui:
     tagsSorter: alpha
     filter: true
+
+app:
+  cors:
+    allowed-origins: http://localhost:3000
 
 logging:
   level:

@@ -2,21 +2,19 @@ package com.example.NoteApplication.service;
 
 import com.example.NoteApplication.DTO.CourseDto;
 import com.example.NoteApplication.entity.Course;
-import com.example.NoteApplication.entity.Note;
-import com.example.NoteApplication.exception.CourseAlreadyInDatabaseException;
 import com.example.NoteApplication.exception.CourseDtoHasIdException;
 import com.example.NoteApplication.exception.CourseNotFoundException;
 import com.example.NoteApplication.mapper.CourseMapper;
 import com.example.NoteApplication.repository.CourseRepository;
 import com.example.NoteApplication.repository.NoteRepository;
 import com.example.NoteApplication.service.interfaces.CourseService;
-import com.example.NoteApplication.service.interfaces.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.NoteApplication.service.constants.CourseServiceConstants.*;
+import static com.example.NoteApplication.service.constants.CourseServiceConstants.COURSE_DTO_HAS_ID;
+import static com.example.NoteApplication.service.constants.CourseServiceConstants.COURSE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +46,6 @@ public class CourseServiceImpl implements CourseService {
             throw new CourseDtoHasIdException(COURSE_DTO_HAS_ID);
         }
 
-        checkCourseByName(courseDto.getName());
         Course course = courseMapper.toEntity(courseDto);
         course = courseRepository.saveAndFlush(course);
         return courseMapper.toDto(course);
@@ -72,20 +69,11 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new CourseNotFoundException(
                         String.format(COURSE_NOT_FOUND, id)));
 
-        checkCourseByName(courseDto.getName());
         Course course = courseMapper.toEntity(courseDto);
         course.setId(oldCourse.getId());
 
         course = courseRepository.saveAndFlush(course);
         return courseMapper.toDto(course);
-    }
-
-    private void checkCourseByName(String name){
-        if(courseRepository.findByLowercaseName(name).isPresent()){
-            throw new CourseAlreadyInDatabaseException(String.format(
-                    COURSE_ALREADY_IN_DATABASE, name
-            ));
-        }
     }
 
 }
