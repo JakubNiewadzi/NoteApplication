@@ -22,5 +22,4 @@ public class MapperUtils {
     public Long getIdFromCourse(Course course){
         return course.getId();
     }
-
 }

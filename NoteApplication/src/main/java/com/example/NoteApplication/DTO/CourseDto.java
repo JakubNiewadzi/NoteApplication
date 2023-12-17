@@ -27,4 +27,7 @@ public class CourseDto {
     @NotNull(message = NAME_NOT_NULL_MESSAGE)
     @NotBlank(message = NAME_NOT_BLANK_MESSAGE)
     String name;
+
+    @JsonView({Views.Get.class})
+    String createdBy;
 }

@@ -1,7 +1,6 @@
-**
-!../../frontend/public
-!src
-!.env
-!package.json
-!package-lock.json
-!nginx.conf
+node_modules
+npm-debug.log
+build
+.git
+*.md
+.gitignore

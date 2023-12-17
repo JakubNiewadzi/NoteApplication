@@ -10,7 +10,11 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
-import static com.example.NoteApplication.DTO.constants.DtoConstants.*;
+import static com.example.NoteApplication.DTO.constants.DtoConstants.CONTENT_NOT_BLANK_MESSAGE;
+import static com.example.NoteApplication.DTO.constants.DtoConstants.CONTENT_NOT_NULL_MESSAGE;
+import static com.example.NoteApplication.DTO.constants.DtoConstants.COURSE_ID_NOT_NULL_MESSAGE;
+import static com.example.NoteApplication.DTO.constants.DtoConstants.NAME_NOT_BLANK_MESSAGE;
+import static com.example.NoteApplication.DTO.constants.DtoConstants.NAME_NOT_NULL_MESSAGE;
 
 @Getter
 @Setter
@@ -36,4 +40,6 @@ public class NoteDto {
     @NotNull(message = COURSE_ID_NOT_NULL_MESSAGE)
     Long courseId;
 
+    @JsonView({Views.Get.class})
+    String createdBy;
 }

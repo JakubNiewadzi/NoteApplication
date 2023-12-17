@@ -3,8 +3,8 @@ package com.example.NoteApplication.mapper;
 import com.example.NoteApplication.DTO.NoteDto;
 import com.example.NoteApplication.entity.Note;
 import com.example.NoteApplication.mapper.utils.MapperUtils;
-import com.example.NoteApplication.service.interfaces.CourseService;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = MapperUtils.class)
 public interface NoteMapper {

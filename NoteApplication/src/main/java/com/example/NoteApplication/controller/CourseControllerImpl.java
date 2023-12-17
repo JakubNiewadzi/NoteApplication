@@ -10,16 +10,27 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Course", description = "Course management APIs")
 @RequestMapping("/course")
 @Slf4j
@@ -51,7 +62,7 @@ public class CourseControllerImpl implements CourseController {
             content = {
                     @Content(schema = @Schema(implementation = CourseDto.class), mediaType = "application/json")})
     @GetMapping("/{id}")
-    public CourseDto getCourseById(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id){
+    public CourseDto getCourseById(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id) {
         log.debug("Getting a course by id: {}", id);
         return courseService.getCourseById(id);
     }
@@ -67,13 +78,14 @@ public class CourseControllerImpl implements CourseController {
         log.debug("Creating a course: {}", courseDto);
         return courseService.addCourse(courseDto);
     }
+
     @Override
     @Operation(
             summary = "Delete course by its id",
             description = "Delete course by its id"
     )
     @DeleteMapping("/{id}")
-    public CourseDto deleteCourse(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id){
+    public CourseDto deleteCourse(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id) {
         log.debug("Deleting a course with id {}", id);
         return courseService.deleteCourse(id);
     }
@@ -86,7 +98,7 @@ public class CourseControllerImpl implements CourseController {
     @Override
     @JsonView(Views.Patch.class)
     public CourseDto updateCourse(@Parameter(description = "Course Id.", example = "1") @PathVariable Long id,
-                                  @RequestBody CourseDto courseDto){
+                                  @RequestBody CourseDto courseDto) {
         log.debug("Updating a course with id: {}", id);
         return courseService.updateNote(id, courseDto);
     }

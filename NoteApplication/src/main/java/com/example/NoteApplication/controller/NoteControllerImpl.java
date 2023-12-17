@@ -10,12 +10,22 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,6 +33,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/note")
+@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Notes", description = "Notes management APIs")
 public class NoteControllerImpl implements NoteController {
 
@@ -67,12 +78,13 @@ public class NoteControllerImpl implements NoteController {
         log.debug("Searching notes by name: {}", name);
         return noteService.searchNotesByName(name);
     }
+
     @Operation(
             summary = "Find all notes by course id",
             description = "Get all notes from database with matching course id"
     )
     @GetMapping("/getByCourseId/{courseId}")
-    public List<NoteDto> searchNotesByCourseId(@PathVariable Long courseId){
+    public List<NoteDto> searchNotesByCourseId(@PathVariable Long courseId) {
         log.debug("Searching notes by course id: {}", courseId);
         return noteService.searchNotesByCourseId(courseId);
     }

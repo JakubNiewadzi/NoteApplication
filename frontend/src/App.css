@@ -12,6 +12,12 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.float-middle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
 .App-header {
   background-color: #282c34;
@@ -19,7 +25,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -36,3 +41,5 @@
     transform: rotate(360deg);
   }
 }
+
+

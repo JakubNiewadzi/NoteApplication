@@ -1,4 +1,15 @@
 services:
+    frontend:
+        build: frontend
+        ports:
+            - '3000:3000'
+        networks:
+            - network
+        depends_on:
+            backend:
+                condition: service_healthy
+            keycloak:
+                condition: service_started
 
     backend:
         build: NoteApplication
@@ -9,14 +20,18 @@ services:
             - DATABASE_DDL=update
         ports:
             - 8080:8080
+        networks:
+            - network
         healthcheck:
             test: wget -qO- http://localhost:8080/actuator/health | grep '"status":"UP"' || exit 1
-            interval: 10s
+            interval: 15s
             timeout: 5s
             retries: 10
         depends_on:
             db:
                 condition: service_healthy
+            keycloak:
+                condition: service_started
 
     db:
         container_name: postgres-database
@@ -26,11 +41,66 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
             - POSTGRES_DB=backend
+        volumes:
+            - db:/var/lib/postgresql/data
         ports:
             - '5432:5432'
+        networks:
+            - network
         healthcheck:
             test: pg_isready -U postgres
-            interval: 10s
+            interval: 15s
             timeout: 5s
             retries: 5
+    
+    keycloak:
+        image: quay.io/keycloak/keycloak:23.0
+        container_name: keycloak
+        environment:
+            - KEYCLOAK_ADMIN=admin
+            - KEYCLOAK_ADMIN_PASSWORD=admin
+            - KC_DB=mysql
+            - KC_DB_URL_HOST=keycloak-db
+            - KC_DB_URL_DATABASE=keycloak
+            - KC_DB_USERNAME=keycloak
+            - KC_DB_PASSWORD=admin
+        volumes:
+            - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+        ports:
+            - '8443:8443'
+        networks:
+            - network
+        command:
+            - "start-dev"
+            - "--http-port=8443"
+            - "--import-realm"
+        depends_on:
+            keycloak-db:
+                condition: service_healthy
+    
+    keycloak-db:
+        image: mysql:8.2
+        container_name: keycloak-db
+        environment:
+            - MYSQL_DATABASE=keycloak
+            - MYSQL_USER=keycloak
+            - MYSQL_PASSWORD=admin
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - keycloak_db:/var/lib/mysql
+        ports:
+            - '3306:3306'
+        networks:
+            - network
+        healthcheck:
+            test: mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}
 
+networks:
+    network:
+        driver: bridge
+
+volumes:
+    db:
+        driver: local
+    keycloak_db:
+        driver: local

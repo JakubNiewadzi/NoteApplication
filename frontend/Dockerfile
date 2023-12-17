@@ -1,9 +1,17 @@
-FROM node:alpine as builder
+FROM node:alpine AS development
 
+# set working directory
+ENV NODE_ENV development
+
+# Setting up the work directory
 WORKDIR /app
-COPY ../../frontend/package.json ./
-COPY ../../frontend/package-lock.json ./
-COPY ../../frontend ./
-RUN npm ci
 
-CMD ["npm", "start"]
+# Installing dependencies
+COPY ./package*.json /app
+
+RUN npm install
+
+# Copying all the files in our project
+COPY . .
+# Starting our application
+CMD ["npm","start"]
