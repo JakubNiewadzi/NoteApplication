@@ -20,6 +20,7 @@ const NoteTableRow = ({note, courses, onDelete}) => (
         <td style={{whiteSpace: 'nowrap'}}>{note.name}</td>
         <td style={{whiteSpace: 'nowrap'}}>{note.content}</td>
         <td style={{whiteSpace: 'nowrap'}}>{courses.find((course) => course.id === note.courseId).name}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{note.createdBy}</td>
         <td align='center'>
             <ButtonGroup>
                 <Button color='primary' tag={Link} to={`/notes/${note.id}`}>
@@ -41,6 +42,7 @@ const NoteTable = ({notes, courses, onDelete}) => (
             <th>Name</th>
             <th>Content</th>
             <th>Course</th>
+            <th>Created by</th>
             <th width='120px'>
                 <div align='center'>Action</div>
             </th>

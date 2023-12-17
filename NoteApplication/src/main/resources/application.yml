@@ -72,7 +72,7 @@ spring:
         format_sql: true
 app:
   jwt:
-    keycloak: http://localhost:8443
+    keycloak: http://keycloak:8443
 
 server:
   port: 8080

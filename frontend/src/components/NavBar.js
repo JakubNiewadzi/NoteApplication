@@ -10,11 +10,11 @@ export const NavBar = () => {
     });
 
     const handleLogin = () => {
-        auth.signinRedirect();
+        auth.signinRedirect()
     };
 
     const handleLogout = () => {
-        auth.signoutRedirect();
+        auth.signoutSilent();
     };
 
     return (
