@@ -30,5 +30,6 @@ public abstract class Auditable {
     private Instant lastModifiedDate;
 
     @CreatedBy
+    @Column(updatable = false)
     private String createdBy;
 }

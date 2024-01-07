@@ -14,14 +14,14 @@ import {
 import {Link} from "react-router-dom";
 import {useAuth} from "react-oidc-context";
 
-const NoteTableRow = ({note, courses, onDelete}) => (
+const NoteTableRow = ({note, courses, onDelete, username}) => (
     <tr key={note.id}>
         <td style={{whiteSpace: 'nowrap'}}>{note.id}</td>
         <td style={{whiteSpace: 'nowrap'}}>{note.name}</td>
         <td style={{whiteSpace: 'nowrap'}}>{note.content}</td>
         <td style={{whiteSpace: 'nowrap'}}>{courses.find((course) => course.id === note.courseId).name}</td>
         <td style={{whiteSpace: 'nowrap'}}>{note.createdBy}</td>
-        <td align='center'>
+        {note.createdBy === username ? <td align='center'>
             <ButtonGroup>
                 <Button color='primary' tag={Link} to={`/notes/${note.id}`}>
                     Edit
@@ -30,11 +30,11 @@ const NoteTableRow = ({note, courses, onDelete}) => (
                     Delete
                 </Button>
             </ButtonGroup>
-        </td>
+        </td> : <td></td>}
     </tr>
 );
 
-const NoteTable = ({notes, courses, onDelete}) => (
+const NoteTable = ({notes, courses, onDelete, username}) => (
     <Table striped bordered hover size='sm'>
         <thead>
         <tr>
@@ -50,7 +50,7 @@ const NoteTable = ({notes, courses, onDelete}) => (
         </thead>
         <tbody>
         {notes.map((note) => (
-            <NoteTableRow key={note.id} note={note} courses={courses} onDelete={onDelete}/>
+            <NoteTableRow key={note.id} note={note} courses={courses} onDelete={onDelete} username={username}/>
         ))}
         </tbody>
     </Table>
@@ -73,6 +73,7 @@ const NoteDropdown = ({isOpen, toggleDropdown, selectedOption, handleOptionSelec
 export const NotesPage = () => {
     const auth = useAuth()
     const accessToken = auth.user.access_token
+    const username = auth.user.profile.preferred_username
     const [notes, setNotes] = useState([]);
     const [courses, setCourses] = useState([]);
     const [rerender, setRerender] = useState(false);
@@ -83,7 +84,8 @@ export const NotesPage = () => {
         const fetchData = async () => {
             try {
                 const [notesResponse, coursesResponse] = await Promise.all([
-                    selectedOption === "All" ? notesApi.getAll(accessToken) : notesApi.getByCourseId(courses.find((course) => course.name === selectedOption).id, accessToken),
+                    selectedOption === "All" ? notesApi.getAll(accessToken) :
+                        notesApi.getByCourseId(courses.find((course) => course.name === selectedOption).id, accessToken),
                     coursesApi.getAll(accessToken)
                 ]);
                 setNotes(notesResponse.data);
@@ -114,10 +116,10 @@ export const NotesPage = () => {
     };
 
     return (
-        <div className='App-header'>
+        <div className='Site-content'>
             <Container fluid>
                 <h3>Courses</h3>
-                <NoteTable notes={notes} courses={courses} onDelete={onDelete}/>
+                <NoteTable notes={notes} courses={courses} onDelete={onDelete} username={username}/>
                 <div className="d-flex justify-content-between align-items-center p-4">
                     <div>
                         <NoteDropdown

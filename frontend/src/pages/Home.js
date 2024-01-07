@@ -4,8 +4,8 @@ import '../App.css'
 export function Home(){
     return (
         <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo'/>
+            <header className='Site-content'>
+                Log in in order to get access to site's content
             </header>
         </div>
     )

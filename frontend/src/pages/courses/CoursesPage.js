@@ -9,17 +9,17 @@ export const CoursesPage = () => {
     const accessToken = auth.user.access_token
     const [courses, setCourses] = useState([]);
     const [rerender, setRerender] = useState(false);
+    const username = auth.user.profile.preferred_username
 
     useEffect(() => {
         coursesApi.getAll(accessToken)
             .then(res => setCourses(res.data))
             .catch(err => console.error('[Fetch Error]:', err))
     }, [rerender]);
-
+    console.log(courses)
     const onDelete = async (course) => {
         try {
             await coursesApi.delete(course.id, accessToken);
-            // Toggle the rerender state to trigger a component rerender
             setRerender((prev) => !prev);
         } catch (err) {
             console.error("[Fetch Error]:", err);
@@ -30,7 +30,8 @@ export const CoursesPage = () => {
             <tr key={course.id}>
                 <td style={{ whiteSpace: 'nowrap' }}>{course.id}</td>
                 <td style={{ whiteSpace: 'nowrap' }}>{course.name}</td>
-                <td align='center'>
+                <td style={{ whiteSpace: 'nowrap' }}>{course.createdBy}</td>
+                {course.createdBy === username ? <td align='center'>
                     <ButtonGroup>
                         <Button color='primary' tag={Link} to={'/courses/' + course.id}>
                             Edit
@@ -40,13 +41,13 @@ export const CoursesPage = () => {
                             Delete
                         </Button>
                     </ButtonGroup>
-                </td>
+                </td> : <td></td>}
             </tr>
         )
     })
     console.log(accessToken)
     return (
-        <div className='App-header'>
+        <div className='Site-content'>
             <Container fluid>
                 <h3>Courses</h3>
                 <Table striped bordered hover size='sm'>
@@ -54,6 +55,7 @@ export const CoursesPage = () => {
                     <tr>
                         <th width='80px'>Id</th>
                         <th>Title</th>
+                        <th>Created by</th>
                         <th width='120px'>
                             <div align='center'>Action</div>
                         </th>

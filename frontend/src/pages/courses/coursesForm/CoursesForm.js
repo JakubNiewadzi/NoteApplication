@@ -8,6 +8,7 @@ import {useAuth} from "react-oidc-context";
 export const CoursesForm = () => {
     const auth = useAuth()
     const accessToken = auth.user.access_token
+    const username = auth.user.profile.preferred_username
     const navigate = useNavigate();
     const {courseId} = useParams();
     const [course, setCourse] = useState({
@@ -16,7 +17,8 @@ export const CoursesForm = () => {
 
     useEffect(() => {
         if (courseId !== 'new') {
-            coursesApi.getById(courseId)
+            console.log(accessToken)
+            coursesApi.getById(courseId, accessToken)
                 .then((res) => {
                     setCourse(res.data, accessToken)
                 });
@@ -35,8 +37,9 @@ export const CoursesForm = () => {
         event.preventDefault();
 
         if (course.id) {
-            console.log(course);
-            await coursesApi.update(course.id, course, accessToken);
+            if (course.createdBy === username) {
+                await coursesApi.update(course.id, course, accessToken);
+            }
         } else {
             await coursesApi.create(course, accessToken);
         }
@@ -44,9 +47,10 @@ export const CoursesForm = () => {
     };
 
     const title = <h2>{course.id ? 'Edit course' : 'Add course'}</h2>;
+    console.log(course);
 
     return (
-        <div className='App-header'>
+        <div className='Site-content'>
             <Container>
                 {title}
                 <Form onSubmit={handleSubmit}>

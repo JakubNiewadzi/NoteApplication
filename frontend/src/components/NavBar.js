@@ -10,7 +10,7 @@ export const NavBar = () => {
     });
 
     const handleLogin = () => {
-        auth.signinRedirect()
+        auth.signinRedirect({redirect_uri: window.location.href})
     };
 
     const handleLogout = () => {
@@ -24,7 +24,7 @@ export const NavBar = () => {
                 <NavbarBrand tag={NavLink} to='/courses' style={style}>Courses</NavbarBrand>
                 <NavbarBrand tag={NavLink} to='/notes' style={style}>Notes</NavbarBrand>
                 {!auth.isAuthenticated ? (
-                    <NavbarBrand tag={NavLink} onClick={handleLogin}>
+                    <NavbarBrand tag={NavLink} onClick={() =>handleLogin()}>
                         Login
                     </NavbarBrand>
                 )

@@ -8,6 +8,7 @@ import {useAuth} from "react-oidc-context";
 export const NotesForm = () => {
     const auth = useAuth()
     const accessToken = auth.user.access_token
+    const username = auth.user.profile.preferred_username
     const navigate = useNavigate();
     const {noteId} = useParams();
     const [note, setNote] = useState({
@@ -15,7 +16,6 @@ export const NotesForm = () => {
         content: '',
         courseId: '',
     });
-
     const [courses, setCourses] = useState([]);
 
 
@@ -41,7 +41,7 @@ export const NotesForm = () => {
             fetchData();
         }, [noteId]
     );
-
+    console.log(note)
     const handleChange = (event) => {
         const target = event.target;
         const value = target.value;
@@ -67,7 +67,9 @@ export const NotesForm = () => {
         event.preventDefault()
 
         if (note.id) {
-            await notesApi.update(note.id, note, accessToken);
+            if (note.createdBy === username) {
+                await notesApi.update(note.id, note, accessToken);
+            }
         } else {
             await notesApi.create(note, accessToken);
         }
@@ -77,7 +79,7 @@ export const NotesForm = () => {
     const title = <h2>{note.id ? 'Edit note' : 'Add Note'}</h2>;
     console.log(note.courseId !== '')
     return (
-        <div className='App-header'>
+        <div className='Site-content'>
             <Container>
                 {title}
                 <Form onSubmit={handleSubmit}>
