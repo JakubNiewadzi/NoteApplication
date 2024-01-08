@@ -34,15 +34,15 @@ const NoteTableRow = ({note, courses, onDelete, username}) => (
     </tr>
 );
 
-const NoteTable = ({notes, courses, onDelete, username}) => (
+const NoteTable = ({notes, courses, onDelete, username, handleSort}) => (
     <Table striped bordered hover size='sm'>
         <thead>
         <tr>
-            <th width='80px'>Id</th>
-            <th>Name</th>
-            <th>Content</th>
+            <th onClick={() => handleSort('id')}  width='80px'>Id</th>
+            <th onClick={() => handleSort('name')}>Name</th>
+            <th onClick={() => handleSort('content')}>Content</th>
             <th>Course</th>
-            <th>Created by</th>
+            <th onClick={() => handleSort('createdBy')}>Created by</th>
             <th width='120px'>
                 <div align='center'>Action</div>
             </th>
@@ -79,6 +79,7 @@ export const NotesPage = () => {
     const [rerender, setRerender] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState("All");
+    const [sortOrder, setSortOrder] = useState('asc')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -115,11 +116,24 @@ export const NotesPage = () => {
         }
     };
 
+    const handleSort = (column) => {
+        const newOrder = sortOrder ==='asc'  ? 'desc' : 'asc'
+        const sorted = [...notes].sort((a, b) => {
+            if (sortOrder === 'asc'){
+                return a[column] > b[column] ? 1 : -1
+            }
+            return a[column] < b[column] ? 1: -1
+        })
+
+        setNotes(sorted)
+        setSortOrder(newOrder)
+    }
+
     return (
         <div className='Site-content'>
             <Container fluid>
                 <h3>Courses</h3>
-                <NoteTable notes={notes} courses={courses} onDelete={onDelete} username={username}/>
+                <NoteTable notes={notes} courses={courses} onDelete={onDelete} username={username} handleSort={handleSort}/>
                 <div className="d-flex justify-content-between align-items-center p-4">
                     <div>
                         <NoteDropdown
